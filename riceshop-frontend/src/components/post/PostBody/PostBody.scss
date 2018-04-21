@@ -1,0 +1,24 @@
+
+@import 'utils';
+
+.post-body {
+    display: flex;
+    flex-direction: column;
+    width: 1024px;
+    margin: 0 auto;
+    .images {
+
+    }
+
+    .descriptions {
+        
+    }
+
+    @include media("<medium") {
+        width: 100%;
+    }
+
+    @include media("<=small") {
+        width: 100%;
+    }
+}

@@ -1,0 +1,14 @@
+
+@import 'utils';
+
+.post-wrapper {
+    display: flex;
+    flex-direction: column;
+    .post-info {
+        // flex: 0.3;
+    }
+
+    .post-body {
+        flex: 0.7;
+    }
+}

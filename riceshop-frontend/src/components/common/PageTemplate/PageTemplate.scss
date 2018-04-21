@@ -1,0 +1,10 @@
+
+@import 'utils';
+
+.page-template {
+    display: flex;
+    flex-direction: column;
+    main {
+        min-height: calc(100vh - 15rem);
+    }
+}
