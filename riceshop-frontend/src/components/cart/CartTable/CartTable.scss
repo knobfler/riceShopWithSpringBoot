@@ -1,6 +1,6 @@
 @import 'utils';
 .cart-table {
-    width: 700px;
+    width: 100%;
     
     margin: 0 auto;
 
@@ -86,6 +86,8 @@
         background: $oc-gray-3;
         width: 95%;
 
+   
+
         @include media("<=small") {
             width: 280px;
         }
@@ -108,8 +110,9 @@
 
            .right-line {
             flex: 0.6;
+            
             .title {
-                
+              
             }
 
             .number {
@@ -132,5 +135,10 @@
                 }
            }
         }
+    }
+
+    .order-button {
+        display: flex;
+        justify-content: center;
     }
 }

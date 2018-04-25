@@ -123,6 +123,9 @@ public class CartController {
                 
             // }
             // responseBody.add(eachCartSession);
+            if(eachCartSession[1].length() > 20) {
+                eachCartSession[1] = eachCartSession[1].substring(0, 20) + "....";
+            }
             Cart cart = new Cart();
             cart.setId(Integer.parseInt(eachCartSession[0]));
             cart.setTitle(eachCartSession[1]);

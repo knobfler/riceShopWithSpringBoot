@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './CartTable.scss';
 import classNames from 'classnames/bind';
 import Button from 'components/common/Button';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -11,12 +12,16 @@ const CartTable = ({ver, cartList, totalPrice, onRemoveById}) => {
       return (
         <div className={cx('row')} key={i}>
             <div className={cx('content')}>
+            <Link to={`/post/${cart.id}`}>
               <img
                 className={cx('image')}
                 src={`/api/uploads/${cart.thumbnailImage}`}/>
+            </Link>
             </div>
             <div className={cx('content')}>
+            <Link to={`/post/${cart.id}`}>
               {cart.title}
+              </Link>
             </div>
             <div className={cx('content')}>
               {cart.amount}
@@ -40,15 +45,19 @@ const CartTable = ({ver, cartList, totalPrice, onRemoveById}) => {
         <div className={cx('line')} key={i}>
           <div className={cx('left-line')}>
             <div className={cx('thumbnail')}>
+            <Link to={`/post/${cart.id}`}>
             <img
                 className={cx('image')}
                 src={`/api/uploads/${cart.thumbnailImage}`}/>
+                </Link>
             </div>
             
           </div>
           <div className={cx('right-line')}>
             <div className={cx('title')}>
+            <Link to={`/post/${cart.id}`}>
                 {cart.title}
+                </Link>
             </div>
             <div className={cx('number')}>
               수량: {cart.amount}
@@ -68,6 +77,13 @@ const CartTable = ({ver, cartList, totalPrice, onRemoveById}) => {
       )
     }
   )
+  if(cartList.length === 0) {
+    return (
+      <div className={cx('no-cart')}>
+        현재 장바구니에 담긴 상품이 없습니다.
+      </div>
+    )
+  }
   return (
     <div className={cx('cart-table')}>
       <div className={cx('cart-content')}>
@@ -105,7 +121,9 @@ const CartTable = ({ver, cartList, totalPrice, onRemoveById}) => {
           }
       </div>
       {
-        !ver && <Button theme="order">주문하기</Button>
+        !ver && <div className={cx('order-button')}>
+          <Button to="/payment" theme="order-mobile">주문하기</Button>
+        </div>
       }
       
     </div>

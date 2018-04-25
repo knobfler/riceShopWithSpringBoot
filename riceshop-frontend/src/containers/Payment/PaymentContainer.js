@@ -8,6 +8,7 @@ import AuthContent from 'components/auth/AuthContent';
 import InputWithLabel from 'components/auth/InputWithLabel';
 import InputWithLabelPhone from 'components/auth/InputWithLabelPhone';
 import InputPhoneWrapper from 'components/auth/InputPhoneWrapper';
+import { withRouter } from 'react-router-dom';
 
 import * as cartActions from 'store/modules/cart';
 import * as paymentActions from 'store/modules/payment';
@@ -40,8 +41,24 @@ class PaymentContainer extends Component {
 
     componentDidMount() {
         this.getCartList();
+        if(localStorage.memberLogged !== "true") {
+            const { history } = this.props;
+            alert("로그인을 하셔야 주문하실수 있습니다. 로그인페이지로 이동합니다.");
+            history.push('/login');
+        }
+        
     }
 
+
+    componentDidUpdate(prevProps, prevState) {
+        const { history } = this.props;
+        if(prevProps.cartList !== this.props.cartList) {
+            if(this.props.cartList.length === 0) {
+                alert("결제하실 상품이 없습니다.");
+                history.push('/');
+            }
+        }
+    }
     handleChange = (e) => {
         const { PaymentActions } = this.props;
         const { name, value } = e.target;
@@ -161,13 +178,14 @@ class PaymentContainer extends Component {
     }
  render() {
      const { handleAddressMapOpen, handleChange, handlePay } = this;
-    const { cartList, totalPrice, userName, userEmail, userPhonePost, userPhoneCenter, userPhoneRear, userAddress, userPostCode, userDetailAddress } = this.props;
+    const { cartList, totalPrice, userName, userEmail, userPhonePost, userPhoneCenter, userPhoneRear, userAddress, userPostCode, userDetailAddress, memberLogged } = this.props;
+   
    return (
 
     <PaymentWrapper>
         <PaymentList title="주문 리스트">
             <CartTable ver="payment" cartList={cartList} totalPrice={totalPrice}/>
-                    <AuthContent>
+                    <AuthContent onButtonClick={handlePay} buttonText="결제하기">
                         <InputWithLabel value={userName} onChange={handleChange} label="주문자 이름" name="userName" placeholder="주문자 이름"/>
                         <InputPhoneWrapper label="핸드폰 번호">
                             <InputWithLabelPhone value={userPhonePost} onChange={handleChange} name="userPhonePost" placeholder="앞 번호"/>
@@ -179,7 +197,6 @@ class PaymentContainer extends Component {
                         <InputWithLabel id="buyer_postcode" disabled="true" label="우편번호" value={userPostCode} onChange={handleChange} name="userPostCode" placeholder="우편번호"/>
                         <InputWithLabel id="detail_addr" label="상세 주소" name="userDetailAddress" value={userDetailAddress} onChange={handleChange} placeholder="상세 주소 입력"/>
                     </AuthContent>
-                    <Button theme="payment" onClick={handlePay}>결제하기</Button>
         </PaymentList>
     </PaymentWrapper>
    );
@@ -197,10 +214,11 @@ export default connect(
       userAddress: state.payment.get('userAddress'),
       userPostCode: state.payment.get('userPostCode'),
       userDetailAddress: state.payment.get('userDetailAddress'),
-      userEmail: state.payment.get('userEmail')
+      userEmail: state.payment.get('userEmail'),
+      memberLogged: state.base.get('memberLogged')
   }),
   (dispatch) => ({
     CartActions: bindActionCreators(cartActions, dispatch),
     PaymentActions: bindActionCreators(paymentActions, dispatch)
 })
-)(PaymentContainer);
+)(withRouter(PaymentContainer));

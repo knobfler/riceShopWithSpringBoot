@@ -66,6 +66,7 @@ export default handleActions({
     ...pender({
         type: ADMIN_LOGOUT,
         onSuccess: (state, action) => {
+            localStorage.adminLogged = null;
             return state.set('adminLogged', false);
         }
     }),
@@ -85,6 +86,7 @@ export default handleActions({
     ...pender({
         type: MEMBER_LOGOUT, 
         onSuccess: (state, action) => {
+            localStorage.memberLogged = null;
             return state.set('memberLogged', false);
         }
     })

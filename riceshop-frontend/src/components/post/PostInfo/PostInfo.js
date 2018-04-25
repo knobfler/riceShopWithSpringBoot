@@ -42,10 +42,11 @@ class PostInfo extends Component {
   handleNumberChange = (e) => {
     const { value } = e.target;
     const { onNumberChange } = this.props;
+
     onNumberChange({value});
   }
   render() {
-    const {title, prices, options, totalPrice, eachPrice, number, onAddCart} = this.props;
+    const {title, prices, options, totalPrice, eachPrice, number, onAddCart, goToPay} = this.props;
     const { isInitial } = this.state;
     const { handleSelectionChanged, handleNumberChange } = this;
     if(prices !== undefined) {
@@ -100,7 +101,7 @@ class PostInfo extends Component {
                   <Button onClick={onAddCart} theme="cart">카트에 담기</Button>
                 </div>
                 <div className={cx('pay-button')}>
-                  <Button theme="pay">결제하기</Button>
+                  <Button theme="pay" onClick={goToPay}>결제하기</Button>
                 </div>
               </div>
             </div>

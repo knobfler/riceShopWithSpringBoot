@@ -23,7 +23,6 @@ const initialState = Map({
     itemId: '',
     item: Map({}),
     eachPrice: 0,
-    number: 0,
     totalPrice: 0,
     number: 1,
     postItemList: List()
@@ -57,11 +56,20 @@ export default handleActions({
         const { initialPrice } = action.payload;
 
         return state.set('eachPrice', initialPrice)
-                    .set('totalPrice', initialPrice);
+                    .set('totalPrice', initialPrice)
+                    .set('number', 1);
     },
     [NUMBER_CHANGED]: (state, action) => {
         const { value } = action.payload;
         const eachPrice = parseInt(state.get('eachPrice'), 10);
+        if(value === "") {
+            return state.set('totalPrice', 1 * eachPrice)
+                        .set('number', "");
+        }
+        if(value <= 0) {
+            return state.set('totalPrice', 1 * eachPrice)
+                        .set('number', 1);
+        }
         return state.set('totalPrice', parseInt(value, 10) * eachPrice)
                     .set('number', parseInt(value, 10));
     },

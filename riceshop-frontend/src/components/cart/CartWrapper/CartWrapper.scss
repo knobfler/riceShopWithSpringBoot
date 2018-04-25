@@ -11,7 +11,11 @@
     margin-bottom: 1rem;
     .shadowed-box {
         margin: 0 auto;
-        width: 750px;
+        width: 100%;
+
+        @include media("<=medium") {
+            width: 100%;
+        }
         @include material-shadow(4, 0.5);
         .logo-wrapper {
             background: $oc-teal-7;
@@ -47,9 +51,9 @@
             }
         }
 
-        @include media("<medium") {
-            width: 310px;
+        // @include media("<medium") {
+        //     width: 310px;
             
-        }
+        // }
     }
 }

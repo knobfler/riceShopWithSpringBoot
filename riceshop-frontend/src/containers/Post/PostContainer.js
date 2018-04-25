@@ -8,6 +8,7 @@ import * as postActions from 'store/modules/post';
 import * as cartActions from 'store/modules/cart';
 import { Helmet } from 'react-helmet';
 import removeMd from 'remove-markdown';
+import { withRouter } from 'react-router-dom';
 class PostContainer extends Component {
 
     initialize = async () => {
@@ -39,10 +40,26 @@ class PostContainer extends Component {
         PostActions.numberChanged({value});
     }
 
+    goToPaymentPage = () => {
+        const { history } = this.props;
+        this.addCart();
+        history.push('/payment');
+        
+    }
+
     addCart = async () => {
         const { CartActions, totalPrice, number } = this.props;
         const { id, title, markdown } = this.props.item.toJS();
-        const thumbnailImage = markdown.split("/api/uploads/")[1].split(")")[0];
+        let thumbnailImage = "";
+        if(!markdown.includes("/api/uploads/")) {
+            thumbnailImage = "image?default_thumbnail.png";
+        } else {
+            thumbnailImage = markdown.split("/api/uploads/")[1].split(")")[0];
+        }
+        if(number === "") {
+            alert("수량을 선택해주세요.");
+            return;
+        }
         try {
             await CartActions.addCart({id, title, amount: number, thumbnailImage, totalPrice});
             if(this.props.errorCode) {
@@ -64,7 +81,7 @@ class PostContainer extends Component {
      const { loading, eachPrice, totalPrice, number, cartLog, errorCode, errorLog } = this.props;
      if(loading) return null;
      const { title, markdown, options, prices } = this.props.item.toJS();
-     const { handleSelectionChanged, handleNumberChanged, initializeItems, addCart } = this;
+     const { handleSelectionChanged, handleNumberChanged, initializeItems, addCart, goToPaymentPage } = this;
     
    return (
        <div>
@@ -86,6 +103,7 @@ class PostContainer extends Component {
                     onNumberChange={handleNumberChanged}
                     totalPrice={totalPrice}
                     onAddCart={addCart}
+                    goToPay={goToPaymentPage}
                         />}
         postBody={<PostBody
                         markdown={markdown}/>}
@@ -111,4 +129,4 @@ export default connect(
       PostActions: bindActionCreators(postActions, dispatch),
       CartActions: bindActionCreators(cartActions, dispatch)
   })
-)(PostContainer);
+)(withRouter(PostContainer));

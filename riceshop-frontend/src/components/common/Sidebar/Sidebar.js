@@ -26,6 +26,7 @@ const Sidebar = ({visible, onClose, adminLogged, adminLogout, memberLogged, memb
         <ClickableMenuItem onClick={adminLogout} key="adminLogout">관리자 로그아웃</ClickableMenuItem>
       ]
     }
+    <MenuItem to="/cart" onClick={onClose} key="editor">장바구니</MenuItem>
     </div>
   </SideBarWrapper>
 );

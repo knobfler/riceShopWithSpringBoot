@@ -8,7 +8,14 @@ const PostItem = ({postItemList}) => {
 
   const postList = postItemList.map(
     (postItem, i) => {
-      const imageUrl = postItem.markdown.split("/api/uploads/")[1].split(")")[0];
+      let imageUrl = "";
+      if(!postItem.markdown.includes("/api/uploads/")) {
+        imageUrl = "image?default_thumbnail.png";
+      } else {
+        imageUrl = postItem.markdown.split("/api/uploads/")[1].split(")")[0];
+      }
+      
+      
       const price = postItem.prices.split(",")[0];
       return (
         <div className={cx('item-card')} key={i}>

@@ -96,10 +96,9 @@ class FormContainer extends Component {
         if (title === "로그인") {
             return (
                 <AuthWrapper>
-                    <AuthContent title={title}>
+                    <AuthContent title={title} onButtonClick={handleMemberLogin} buttonText={title}>
                         <InputWithLabel onChange={handleChangeInput} label="아이디" value={userID} name="userID" placeholder="아이디"/>
                         <InputWithLabel onChange={handleChangeInput} type="password" label="비밀번호" value={userPassword} name="userPassword" placeholder="비밀번호" onKeyPress={handleKeyPressMemberLogin} />
-                        <Button onClick={handleMemberLogin} theme="login">로그인</Button>
                     </AuthContent>
                 </AuthWrapper>
             );
@@ -107,7 +106,7 @@ class FormContainer extends Component {
         if(title === "회원가입") {
             return (
                 <AuthWrapper>
-                    <AuthContent title={title}>
+                    <AuthContent title={title} onButtonClick={handleRegister} buttonText={title}>
                         <InputWithLabel onChange={handleChangeInput} label="아이디" value={userID} name="userID" placeholder="아이디"/>
                         <InputWithLabel onChange={handleChangeInput} type="password" label="비밀번호" value={userPassword} name="userPassword" placeholder="비밀번호"/>
                         <InputWithLabel
@@ -119,7 +118,6 @@ class FormContainer extends Component {
                             placeholder="비밀번호 확인"/>
                         <InputWithLabel onChange={handleChangeInput} label="이메일" value={userEmail} name="userEmail" placeholder="이메일"/>
                         <InputWithLabel onChange={handleChangeInput} label="이름" value={userName} name="userName" placeholder="이름" onKeyPress={handleKeyPressRegister}/>
-                        <Button onClick={handleRegister} theme="register">회원가입</Button>
                     </AuthContent>
                 </AuthWrapper>
             );
@@ -127,10 +125,9 @@ class FormContainer extends Component {
         if(title === "관리자 로그인") {
             return (
                 <AuthWrapper>
-                    <AuthContent title={title}>
+                    <AuthContent title={title} onButtonClick={adminLogin} buttonText={title}>
                         <InputWithLabel onChange={handleChangeInput} label="아이디" value={userID} name="userID" placeholder="아이디"/>
                         <InputWithLabel onKeyPress={handleKeyPress} onChange={handleChangeInput} type="password" label="비밀번호" value={userPassword} name="userPassword" placeholder="비밀번호"/>
-                        <Button theme="login" onClick={adminLogin}>로그인</Button>
                     </AuthContent>
                 </AuthWrapper>
             );
