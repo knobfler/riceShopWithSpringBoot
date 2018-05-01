@@ -7,8 +7,6 @@ const cx = classNames.bind(styles);
 
 const PostBody = ({markdown}) => (
   <div className={cx('post-body')}>
-    <div className={cx('images')}>
-    </div>
     <div className={cx('descriptions')}>
       <MarkdownRender markdown={markdown}/>
     </div>

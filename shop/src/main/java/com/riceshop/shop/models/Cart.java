@@ -1,11 +1,40 @@
 package com.riceshop.shop.models;
 
 public class Cart {
+    private int cartId;
     private int id;
     private String title;
     private int amount;
     private String thumbnailImage;
     private int totalPrice;
+    private String option;
+
+    /**
+     * @param cartId the cartId to set
+     */
+    public void setCartId(int cartId) {
+        this.cartId = cartId;
+    }
+    /**
+     * @return the cartId
+     */
+    public int getCartId() {
+        return cartId;
+    }
+    
+
+    /**
+     * @param option the option to set
+     */
+    public void setOption(String option) {
+        this.option = option;
+    }
+    /**
+     * @return the option
+     */
+    public String getOption() {
+        return option;
+    }
 
 
     /**

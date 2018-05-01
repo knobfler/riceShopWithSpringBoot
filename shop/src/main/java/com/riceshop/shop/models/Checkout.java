@@ -12,6 +12,49 @@ public class Checkout {
     private String buyer_addr;
     private String buyer_postcode;
     private String createdAt;
+    private String ordered_list;
+    private String ordered_number;
+    private Boolean checked;
+
+    /**
+     * @param checked the checked to set
+     */
+    public void setChecked(Boolean checked) {
+        this.checked = checked;
+    }
+    /**
+     * @return the checked
+     */
+    public Boolean getChecked() {
+        return checked;
+    }
+    
+
+    /**
+     * @return the ordered_list
+     */
+    public String getOrdered_list() {
+        return ordered_list;
+    }
+    /**
+     * @param ordered_list the ordered_list to set
+     */
+    public void setOrdered_list(String ordered_list) {
+        this.ordered_list = ordered_list;
+    }
+    /**
+     * @return the ordered_number
+     */
+    public String getOrdered_number() {
+        return ordered_number;
+    }
+    /**
+     * @param ordered_number the ordered_number to set
+     */
+    public void setOrdered_number(String ordered_number) {
+        this.ordered_number = ordered_number;
+    }
+
 
 
 

@@ -10,17 +10,24 @@ class CartContainer extends Component {
 
   getCartList = async () => {
     const { CartActions } = this.props;
-
+    const config = {
+      headers: { Pragma: 'no-cache'}
+  };
     try {
-      await CartActions.getCartList();
+       await CartActions.getCartList(config);
     } catch(e){
       console.log(e);
     }
+    
   }
 
   componentDidMount() {
     this.getCartList();
+    
+    
   }
+
+
 
   removeCartById = async (e) => {
     const { CartActions } = this.props;
@@ -37,6 +44,9 @@ class CartContainer extends Component {
    const { removeCartById } = this;
    if(loading) return null;
    return (
+    //  <div>
+    //    <input type="text" value={JSON.stringify(cartList)} style={{width: "100%", height: "3rem"}}/>
+    //   </div>
     <CartWrapper>
         <CartContent>
             <CartTable cartList={cartList} totalPrice={totalPrice} onRemoveById={removeCartById}/>

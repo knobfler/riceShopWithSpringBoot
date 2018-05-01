@@ -2,10 +2,10 @@
 @import 'utils';
 
 .hamburger-wrapper {
-//   position: fixed;
-  right: 16px;
-  top: 18px;
-  z-index: 10;
+  position: relative;
+  // right: 16px;
+  // top: 18px;
+  z-index: 15;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
   -webkit-tap-highlight-color: transparent;
   

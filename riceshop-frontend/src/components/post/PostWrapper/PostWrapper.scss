@@ -2,13 +2,20 @@
 @import 'utils';
 
 .post-wrapper {
+    width: 1024px;
     display: flex;
     flex-direction: column;
+    margin: 0 auto;
+    @include media("<large") {
+        width: 100%;
+    }
     .post-info {
         // flex: 0.3;
+        height: 100%;
     }
 
     .post-body {
-        flex: 0.7;
+        // flex: 0.7;
+        height: 100%;
     }
 }

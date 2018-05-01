@@ -20,7 +20,7 @@ const CartTable = ({ver, cartList, totalPrice, onRemoveById}) => {
             </div>
             <div className={cx('content')}>
             <Link to={`/post/${cart.id}`}>
-              {cart.title}
+              {cart.title} - {cart.option}
               </Link>
             </div>
             <div className={cx('content')}>
@@ -31,7 +31,7 @@ const CartTable = ({ver, cartList, totalPrice, onRemoveById}) => {
             </div>
             {
               !ver && <div className={cx('content')}>
-                        <Button removeid={cart.id} onClick={onRemoveById} theme="remove">삭제</Button>
+                        <Button removeid={cart.cartId} onClick={onRemoveById} theme="remove">삭제</Button>
                       </div>
             }
           </div>
@@ -68,7 +68,7 @@ const CartTable = ({ver, cartList, totalPrice, onRemoveById}) => {
           </div>
           {
             !ver && <div className={cx('remove-line')}>
-                      <div className={cx('remove-mark')} removeid={cart.id} onClick={onRemoveById}>
+                      <div className={cx('remove-mark')} removeid={cart.cartId} onClick={onRemoveById}>
                         X
                       </div>
                     </div>

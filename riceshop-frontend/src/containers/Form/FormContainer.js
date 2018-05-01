@@ -14,11 +14,18 @@ class FormContainer extends Component {
     initialize = () => {
         const { AuthActions } = this.props;
         AuthActions.initialize();
+        
     }
 
     componentDidMount() {
+        if(localStorage.adminLogged === "true" || localStorage.memberLogged === "true") {
+            alert("이미 로그인 하셨습니다.");
+            document.location.href = "/";
+        }
         this.initialize();
     }
+    
+    
 
     handleChangeInput = (e) => {
         const { name, value } = e.target;
@@ -50,6 +57,10 @@ class FormContainer extends Component {
         const { AuthActions, history } = this.props;
         const { userID, userEmail, userPassword, userPasswordConfirm, userName } = this.props.input.toJS();
 
+        if(userID === "") {
+            alert("아이디를 입력해주세요");
+            return;
+        }
         if(userPassword !== userPasswordConfirm) {
             alert("두 비밀번호가 같지 않습니다.");
             return;
@@ -57,6 +68,7 @@ class FormContainer extends Component {
         try {
             await AuthActions.register({userID, userPassword, userEmail, userName});
             this.initialize();
+            alert("회원가입 되었습니다! 로그인 페이지로 이동합니다.");
             history.push('/login');
         } catch(e) {
             console.log(e);
@@ -87,13 +99,25 @@ class FormContainer extends Component {
             this.handleMemberLogin();
         }
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { AuthActions } = this.props;
+        if(prevProps.errorMessage !== this.props.errorMessage && this.props.errorMessage !== "") {
+            alert(this.props.errorMessage);
+            AuthActions.resetErrorMessage();
+        }
+    }
     render() {
-        const {title} = this.props;
+        const {title } = this.props;
         const { handleChangeInput, adminLogin, handleKeyPress, handleRegister, handleKeyPressRegister, handleMemberLogin, handleKeyPressMemberLogin } = this;
         const { userID, userPassword, userPasswordConfirm, userEmail, userName } = this.props.input.toJS();
         // const title = ""; if(category === "/login") {     title = "로그인"; } else {
         // title = "회원가입"; }
         if (title === "로그인") {
+            const { memberLogged } = this.props;
+            if(memberLogged) {
+                return null;
+            }
             return (
                 <AuthWrapper>
                     <AuthContent title={title} onButtonClick={handleMemberLogin} buttonText={title}>
@@ -104,6 +128,10 @@ class FormContainer extends Component {
             );
         }
         if(title === "회원가입") {
+            const { memberLogged } = this.props;
+            if(memberLogged) {
+                return null;
+            }
             return (
                 <AuthWrapper>
                     <AuthContent title={title} onButtonClick={handleRegister} buttonText={title}>
@@ -123,6 +151,10 @@ class FormContainer extends Component {
             );
         }
         if(title === "관리자 로그인") {
+            const { adminLogged } = this.props;
+            if(adminLogged) {
+                return null;
+            }
             return (
                 <AuthWrapper>
                     <AuthContent title={title} onButtonClick={adminLogin} buttonText={title}>
@@ -138,7 +170,9 @@ class FormContainer extends Component {
 
 export default connect((state) => ({
     input: state.auth.get('input'),
-    adminLogged: state.base.get('adminLogged')
+    adminLogged: state.base.get('adminLogged'),
+    errorMessage: state.auth.get('errorMessage'),
+    memberLogged: state.base.get('memberLogged')
 }), (dispatch) => ({
     AuthActions: bindActionCreators(authActions, dispatch),
     BaseActions: bindActionCreators(baseActions, dispatch)

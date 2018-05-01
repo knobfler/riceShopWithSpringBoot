@@ -10,6 +10,8 @@ const GET_POST_ITEM_BY_ID = 'post/GET_POST_ITEM_BY_ID';
 const SELECTOR_CHANGED = 'post/SELECTOR_CHANGED';
 const NUMBER_CHANGED = 'post/NUMBER_CHANGED';
 const GET_POST_ITEM_LIST = 'post/GET_POST_ITEM_LIST';
+const DELETE_ITEM_BY_ID = 'post/DELETE_ITEM_BY_ID';
+const UPDATE_ITEM_BY_ID = 'post/UPDATE_ITEM_BY_ID';
 
 // action creator
 export const postItem = createAction(POST_ITEM, api.postItem);
@@ -18,6 +20,8 @@ export const selectorChanged = createAction(SELECTOR_CHANGED);
 export const numberChanged = createAction(NUMBER_CHANGED);
 export const initialize = createAction(INITIALIZE);
 export const getPostItemList = createAction(GET_POST_ITEM_LIST, api.getPostItemList);
+export const deleteItemById = createAction(DELETE_ITEM_BY_ID, api.deleteItemById);
+export const updateItemById = createAction(UPDATE_ITEM_BY_ID, api.updateItemById);
 // initial state
 const initialState = Map({
     itemId: '',
@@ -25,7 +29,8 @@ const initialState = Map({
     eachPrice: 0,
     totalPrice: 0,
     number: 1,
-    postItemList: List()
+    postItemList: List(),
+    selectedOption: ''
 });
 
 // reducer
@@ -42,15 +47,17 @@ export default handleActions({
         type: GET_POST_ITEM_BY_ID,
         onSuccess: (state, action) => {
             const { data: item } = action.payload;
-            return state.set('item', fromJS(item));
+            return state.set('item', fromJS(item))
+                        .set('selectedOption', item.options.split(",")[0]);
         }
     }),
     [SELECTOR_CHANGED]: (state, action) => {
         // console.log(act)
-        const { value } = action.payload;
+        const { value, option } = action.payload;
         return state.set('eachPrice', parseInt(value, 10))
                     .set('totalPrice', parseInt(value, 10))
-                    .set('number', 1);
+                    .set('number', 1)
+                    .set('selectedOption', option);
     },
     [INITIALIZE]: (state, action) => {
         const { initialPrice } = action.payload;
@@ -78,6 +85,15 @@ export default handleActions({
         onSuccess: (state, action) => {
             const { data: postItemList } = action.payload;
             return state.set('postItemList', postItemList);
+        }
+    }),
+    ...pender({
+        type: UPDATE_ITEM_BY_ID,
+        onSuccess: (state, action) => {
+            const { data: item } = action.payload;
+            return state.set('itemId', item.id);
+
+
         }
     })
 }, initialState);

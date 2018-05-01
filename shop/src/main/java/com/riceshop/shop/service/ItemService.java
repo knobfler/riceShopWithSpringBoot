@@ -23,4 +23,24 @@ public class ItemService {
     public List<PostItem> getItemList() {
         return itemDAO.getItemList();
     }
+
+    public boolean delete(long id) {
+        return itemDAO.delete(id);
+    }
+
+    public void update(PostItem postItem) {
+        itemDAO.update(postItem);
+    }
+
+    public List<PostItem> getItemListByScrolling(long lastId) {
+        return itemDAO.getItemListByScrolling(lastId);
+    }
+
+    public long getLastId() {
+        return itemDAO.getLastId();
+    }
+
+    public List<PostItem> getItemListOnlySix() {
+        return itemDAO.getItemListOnlySix();
+    }
 }

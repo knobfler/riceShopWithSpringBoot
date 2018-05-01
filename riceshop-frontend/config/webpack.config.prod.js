@@ -59,8 +59,8 @@ module.exports = {
   entry: {
     app:  paths.appIndexJs,
     vendor: [
-      require.resolve('./polyfills'), 
-      require.resolve('babel-polyfill'),
+      require.resolve('./polyfills'),
+      require.resolve('babel-polyfill'), 
       'react',
       'react-dom',
       'react-router-dom',

@@ -1,10 +1,10 @@
-import { CartPage, EditorPage, FormPage, ListPage, PaymentPage, PostPage } from 'pages';
+import { CartPage, EditorPage, FormPage, ListPage, PaymentPage, PostPage, ItemPage, CheckoutPage } from 'pages';
 
 export default [
     {
       path: '/',
       exact: true,
-      component: ListPage
+      component: ItemPage
     },
     {
         path: '/post/:id',
@@ -20,8 +20,15 @@ export default [
     },
     {
       path: '/admin',
+      exact: true,
       component: FormPage
-    },{
+    },
+    {
+      path: '/admin/list',
+      exact: true,
+      component: CheckoutPage
+    },
+    {
       path: '/editor',
       component: EditorPage
     },
@@ -33,5 +40,9 @@ export default [
         path: '/payment',
         component: PaymentPage
     },
+    {
+      path: '/item',
+      component: ListPage
+    }
 
 ];

@@ -1,0 +1,28 @@
+
+@import 'utils';
+
+.checkout-list {
+    .checkout-form {
+        background: $oc-gray-3;
+        display: flex;
+        flex-direction: column;
+        .line {
+            display: flex;
+            flex-direction: row;
+            .number {
+                flex: 0.1;
+            }
+
+            .title {
+                flex: 0.5;
+
+            }
+            .amount {
+                flex: 0.2;
+            }
+            .username {
+                flex: 0.2;
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+@import 'utils';
+.wrapper {
+    text-align: center;
+    margin-top: 32px;
+    margin-bottom: 32px;
+    .svg {
+        width: 64;
+        height: 64;
+        stroke: $oc-gray-7;
+    }
+}

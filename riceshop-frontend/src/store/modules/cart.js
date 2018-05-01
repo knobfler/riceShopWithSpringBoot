@@ -9,11 +9,13 @@ const ADD_CART = 'cart/ADD_CART';
 const INITIALIZE = 'cart/INITIALIZE';
 const GET_CART_LIST = 'cart/GET_CART_LIST';
 const REMOVE_CART_BY_ID = 'cart/REMOVE_CART_BY_ID';
+const REMOVE_CART = 'cart/REMOVE_CART';
 // action creator
 export const addCart = createAction(ADD_CART, api.addCart);
 export const initialize = createAction(INITIALIZE);
 export const getCartList = createAction(GET_CART_LIST, api.getCartList);
 export const removeCartById = createAction(REMOVE_CART_BY_ID, api.removeCartById);
+export const removeCart = createAction(REMOVE_CART, api.removeCart);
 
 // initial state
 const initialState = Map({
@@ -44,7 +46,11 @@ export default handleActions({
     ...pender({
         type: GET_CART_LIST,
         onSuccess: (state, action) => {
+            
             const { data: cartList } = action.payload;
+            if(cartList === "") {
+                return state.set('cartList', []);
+            }
             const totalPriceList = cartList.map(
                 (cart, i) => {
                     let totalPrice = 0;

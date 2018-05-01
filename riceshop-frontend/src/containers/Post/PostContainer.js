@@ -30,9 +30,9 @@ class PostContainer extends Component {
         this.initialize();
     }
 
-    handleSelectionChanged = ({value}) => {
+    handleSelectionChanged = ({value, option}) => {
         const { PostActions } = this.props;
-        PostActions.selectorChanged({value});
+        PostActions.selectorChanged({value, option});
     }
 
     handleNumberChanged = ({value}) => {
@@ -48,7 +48,7 @@ class PostContainer extends Component {
     }
 
     addCart = async () => {
-        const { CartActions, totalPrice, number } = this.props;
+        const { CartActions, totalPrice, number, selectedOption } = this.props;
         const { id, title, markdown } = this.props.item.toJS();
         let thumbnailImage = "";
         if(!markdown.includes("/api/uploads/")) {
@@ -61,7 +61,7 @@ class PostContainer extends Component {
             return;
         }
         try {
-            await CartActions.addCart({id, title, amount: number, thumbnailImage, totalPrice});
+            await CartActions.addCart({id, title, amount: number, thumbnailImage, totalPrice, option: selectedOption});
             if(this.props.errorCode) {
                 const { CartActions } = this.props;
                 alert(this.props.errorLog);
@@ -77,11 +77,37 @@ class PostContainer extends Component {
         }
     }
 
+    handleDeleteItemById = async () => {
+        const { PostActions, id, history } = this.props;
+
+        try {
+            await PostActions.deleteItemById(id);
+            alert("상품이 삭제되었습니다.");
+            history.push("/item");
+
+        } catch(e){
+            console.log(e);
+        }
+    }
+
+
+    handleUpdate = () => {
+        const { PostActions, id, history } = this.props;
+        history.push(`/editor?id=${id}`);
+    }
+
  render() {
-     const { loading, eachPrice, totalPrice, number, cartLog, errorCode, errorLog } = this.props;
+     const { loading, eachPrice, totalPrice, number, cartLog, errorCode, errorLog, adminLogged } = this.props;
      if(loading) return null;
      const { title, markdown, options, prices } = this.props.item.toJS();
-     const { handleSelectionChanged, handleNumberChanged, initializeItems, addCart, goToPaymentPage } = this;
+
+     const { handleSelectionChanged, 
+            handleNumberChanged, 
+            initializeItems, 
+            addCart, 
+            goToPaymentPage,
+            handleDeleteItemById,
+            handleUpdate } = this;
     
    return (
        <div>
@@ -93,6 +119,10 @@ class PostContainer extends Component {
         }
     <PostWrapper
         postInfo={<PostInfo
+                    markdown={markdown}
+                    onUpdate={handleUpdate}
+                    onRemoveItem={handleDeleteItemById}
+                    adminLogged={adminLogged}
                     initialize={initializeItems}  
                     title={title}
                     prices={prices}
@@ -123,7 +153,9 @@ export default connect(
       number: state.post.get('number'),
       errorLog: state.cart.getIn(['cartError', 'errorLog']),
       errorCode: state.cart.getIn(['cartError', 'errorCode']),
-      cartLog: state.cart.get('cartLog')
+      cartLog: state.cart.get('cartLog'),
+      adminLogged: state.base.get('adminLogged'),
+      selectedOption: state.post.get('selectedOption')
   }),
   (dispatch) => ({
       PostActions: bindActionCreators(postActions, dispatch),

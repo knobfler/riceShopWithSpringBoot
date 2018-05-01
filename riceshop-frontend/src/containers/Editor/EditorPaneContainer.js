@@ -5,8 +5,21 @@ import * as editorActions from 'store/modules/editor';
 import * as postActions from 'store/modules/post';
 import EditorPane from 'components/editor/EditorPane';
 import { withRouter } from 'react-router-dom';
+import queryString from 'query-string';
 
 class EditorPaneContainer extends Component {
+
+
+    componentDidMount() {
+        const { EditorActions, location, PostActions } = this.props;
+        EditorActions.initialize();
+
+        const { id } = queryString.parse(location.search);
+        if(id) {
+            EditorActions.getPostItemById(id);
+        }
+    }
+
     handleChangeInput = ({name, value}) => {
         const {EditorActions} = this.props;
         EditorActions.changeInput({name, value});
@@ -31,8 +44,15 @@ class EditorPaneContainer extends Component {
 
 
     handlePostItem = async () => {
-        const { PostActions, title, markdown, option, price, history } = this.props;
+        const { PostActions, title, markdown, option, price, history, location } = this.props;
+        const { id } = queryString.parse(location.search);
         try {
+
+            if(id) {
+                await PostActions.updateItemById({id, title, markdown, option, price});
+                alert("수정되었습니다.");
+                return history.push(`/post/${this.props.itemId}`);
+            }
             await PostActions.postItem({title, markdown,option, price});
             history.push(`/post/${this.props.itemId}`);
 
@@ -45,6 +65,7 @@ class EditorPaneContainer extends Component {
     render() {
         const {title, markdown, option, price} = this.props;
         const {handleChangeInput, handleImageUpload, handlePostItem} = this;
+
         return (<EditorPane
             title={title}
             markdown={markdown}

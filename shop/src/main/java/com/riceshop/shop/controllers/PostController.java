@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import com.riceshop.shop.models.PostItem;
 import com.riceshop.shop.service.ItemService;
 
@@ -27,7 +29,10 @@ public class PostController {
 
     @RequestMapping(value="/", method=RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> post(PostItem postItem, @RequestBody Map<String, String> body) {
+    public ResponseEntity<?> post(PostItem postItem, @RequestBody Map<String, String> body, HttpSession session) {
+        if(!(Boolean)session.getAttribute("adminLogged")) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         String title = body.get("title");
         String markdown = body.get("markdown");
         String option = body.get("option");
@@ -76,6 +81,81 @@ public class PostController {
         } catch(Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value="/more/{lastId}", method=RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> getMoreItemList(@PathVariable Long lastId) {
+        List<PostItem> postItems;
+        try {
+            // long id = itemService.getLastId();
+            // System.out.println("id: " + id);
+            postItems = itemService.getItemListByScrolling(lastId);
+            return new ResponseEntity<>(postItems, HttpStatus.OK);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value="/initial", method=RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> getOnlySix() {
+        List<PostItem> postItems;
+
+        try {
+            postItems = itemService.getItemListOnlySix();
+            return new ResponseEntity<>(postItems, HttpStatus.OK);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    
+    @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+    @ResponseBody
+    public ResponseEntity<?> deleteItem(@PathVariable Long id, HttpSession session) {
+        try {
+            if((Boolean) session.getAttribute("adminLogged")) {
+                boolean isSuccess = itemService.delete(id);
+                if(isSuccess) {
+                    return new ResponseEntity<>("success: true", HttpStatus.NO_CONTENT);
+                }
+                return new ResponseEntity<>("success: false", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>("success: false", HttpStatus.UNAUTHORIZED);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("success: false", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value="/{id}", method=RequestMethod.PATCH)
+    @ResponseBody
+    public ResponseEntity<?> updateItem(@PathVariable Long id, @RequestBody Map<String, String> body, HttpSession session, PostItem postItem) {
+        String title = body.get("title");
+        String markdown = body.get("markdown");
+        String options = body.get("option");
+        String prices = body.get("price");
+        String publishedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+
+        try {
+            if((Boolean) session.getAttribute("adminLogged")) {
+                postItem.setTitle(title);
+                postItem.setMarkdown(markdown);
+                postItem.setOptions(options);
+                postItem.setPrices(prices);
+                postItem.setPublishedDate(publishedDate);
+                itemService.update(postItem);
+
+                return new ResponseEntity<>(postItem, HttpStatus.OK);
+            }
+            return new ResponseEntity<>("success: false", HttpStatus.UNAUTHORIZED);
+        } catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("success: false", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

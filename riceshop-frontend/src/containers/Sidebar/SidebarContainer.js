@@ -4,8 +4,14 @@ import {connect} from 'react-redux';
 import * as baseActions from 'store/modules/base';
 import Sidebar from 'components/common/Sidebar';
 import Hamburger from 'components/common/Hamburger';
+import onClickOutside from 'react-onclickoutside';
 
 class SidebarContainer extends Component {
+
+    handleClickOutside = (e) => {
+        const { BaseActions } = this.props;
+        BaseActions.hideSidebar();
+    }
     handleOpen = () => {
         const {BaseActions} = this.props;
         BaseActions.showSidebar();
@@ -42,8 +48,12 @@ class SidebarContainer extends Component {
             console.log(e);
         }
     }
+
+    goToCartPage = () => {
+        document.location.href = "/cart";
+    }
     render() {
-        const { handleClose, handleToggle, adminLogout, memberLogout } = this;
+        const { handleClose, handleToggle, adminLogout, memberLogout, goToCartPage } = this;
         const { visible, adminLogged, memberLogged } = this.props;
         return [ < Sidebar 
                     adminLogout={adminLogout}
@@ -51,7 +61,8 @@ class SidebarContainer extends Component {
                     memberLogged={memberLogged}
                     memberLogout={memberLogout}
                     visible={visible} 
-                    onClose={handleClose} 
+                    onClose={handleClose}
+                    goToCartPage={goToCartPage} 
                     key={0} />, < Hamburger active={visible} onToggle={handleToggle} key={1}/>
         ]
     }
@@ -63,4 +74,4 @@ export default connect((state) => ({
         .getIn(['sideBar', 'visible'])
 }), (dispatch) => ({
     BaseActions: bindActionCreators(baseActions, dispatch)
-}))(SidebarContainer);
+}))(onClickOutside(SidebarContainer));

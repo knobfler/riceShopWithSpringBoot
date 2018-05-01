@@ -1,8 +1,8 @@
 import React from 'react';
 import PageTemplate from 'components/common/PageTemplate';
 import EditorContainer from 'containers/Editor/EditorContainer';
+const EditorPage = () => {
 
-const EditorPage = (props) => {
     return (
         <PageTemplate>
             <EditorContainer/>
